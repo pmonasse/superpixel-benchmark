@@ -1188,7 +1188,7 @@ void EvaluationSummary::computeSummary(int &gt_max) {
         cv::Mat sp_segmentation;
 //        IOUtil::readMatCSVInt(it->second, sp_segmentation, image.rows, image.cols);
         IOUtil::readMatCSVInt(it->second, sp_segmentation);
-        cv::Mat image = cv::imread(img_file.string(), CV_LOAD_IMAGE_COLOR);
+        cv::Mat image = cv::imread(img_file.string(), cv::IMREAD_COLOR); //CV_LOAD_IMAGE_COLOR);
         
 //        cv::namedWindow("Image");
 //        cv::imshow("Image", image);

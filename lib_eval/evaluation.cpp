@@ -521,7 +521,7 @@ float Evaluation::computeMeanDistanceToEdge(const cv::Mat &labels,
     }
     
     cv::Mat distance;
-    cv::distanceTransform(boundary, distance, CV_DIST_L2, 3);
+    cv::distanceTransform(boundary, distance, cv::DIST_L2, 3);
     
     float mean_distance_edge = 0;
     int count = 0;
@@ -719,7 +719,7 @@ float Evaluation::computeContourDensity(const cv::Mat &labels) {
 void computeGradientMagnitude(const cv::Mat &image, cv::Mat &gradient_magnitude) {
     cv::Mat image_gray;
     if (image.channels() == 3) {
-        cv::cvtColor(image, image_gray, CV_BGR2GRAY);
+      cv::cvtColor(image, image_gray, cv::COLOR_BGR2GRAY);
     }
     else {
         image_gray = image.clone();
@@ -755,7 +755,7 @@ void computeGradientMagnitude(const cv::Mat &image, cv::Mat &gradient_magnitude)
 void computeCannyEdges(const cv::Mat &image, float threshold, cv::Mat &canny) {
     cv::Mat image_gray;
     if (image.channels() == 3) {
-        cv::cvtColor(image, image_gray, CV_BGR2GRAY);
+      cv::cvtColor(image, image_gray, cv::COLOR_BGR2GRAY);
     }
     else {
         image_gray = image.clone();
@@ -960,14 +960,18 @@ float Evaluation::computeAverageMetric(const std::vector<float>& values, const s
             [&](int i1, int i2) {return superpixels[i1] < superpixels[i2];});
             
     int i_min = 0;
-    while (superpixels[indices[i_min + 1]] <= min_superpixels) {
+    while (i_min+1<indices.size() && superpixels[indices[i_min + 1]] <= min_superpixels) {
         i_min++;
     }
+    if(i_min+1>=indices.size())
+      return 0.0/0.0; //nan
     
     int i_max = indices.size() - 1;
-    while (superpixels[indices[i_max - 1]] >= max_superpixels) {
+    while (i_max-1>=0 && superpixels[indices[i_max - 1]] >= max_superpixels) {
         i_max--;
     }
+    if(i_max-1<0)
+      return 0.0/0.0; //nan
     
     std::vector<float> corrected_values;
     std::vector<int> corrected_superpixels;
@@ -985,7 +989,7 @@ float Evaluation::computeAverageMetric(const std::vector<float>& values, const s
         i_min++;
     }
     
-    for (unsigned int i = i_min; i < i_max - 1; i++) {
+    for (unsigned int i = i_min; i <= i_max; i++) {
         corrected_values.push_back(values[indices[i]]);
         corrected_superpixels.push_back(superpixels[indices[i]]);
     }

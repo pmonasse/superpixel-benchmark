@@ -982,7 +982,7 @@ void PreemptiveSLIC::preemptiveSLIC(const Mat& I_rgb, const int k, const double 
 
 
   Mat I_lab;
-  cvtColor(I_rgb, I_lab, CV_BGR2Lab); // I_lab is CV_8UC3
+  cvtColor(I_rgb, I_lab, cv::COLOR_BGR2Lab); // I_lab is CV_8UC3
   
   // fill lab vectors
   m_lvec = new double[sz];
@@ -1044,7 +1044,7 @@ void PreemptiveSLIC::preemptiveSLIC(const Mat& I_rgb, const int region_size, con
   Mat I_lab;
   if (!rgb)
   {
-    cvtColor(I_rgb, I_lab, CV_BGR2Lab);
+    cvtColor(I_rgb, I_lab, cv::COLOR_BGR2Lab);
   }
   else
   {
