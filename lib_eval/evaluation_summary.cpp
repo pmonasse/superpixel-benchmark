@@ -860,6 +860,10 @@ float EvaluationSummary::computeMean(const std::vector<int> gt, const cv::Mat &d
                 max = data.at<float>(i, j);
             }
         }
+	// Do not forget last data
+	mean_min += min;
+	mean_max += max;
+	++count_0;
         
         mean_min /= count_0;
         mean_max /= count_0;
@@ -931,6 +935,9 @@ void EvaluationSummary::comuteMedianFirstAndThirdQuartile(const std::vector<int>
                 max = data.at<float>(i, j);
             }
         }
+	// Do not forget last data
+	min_sorted.push_back(min);
+	max_sorted.push_back(max);
         
         gt_sorted.push_back(min_sorted);
         gt_sorted.push_back(max_sorted);
@@ -1041,6 +1048,22 @@ void EvaluationSummary::comuteMinMax(const std::vector<int> gt, const cv::Mat &d
                 max = data.at<float>(i, j);
             }
         }
+	// Do not forget last data
+	if (min < min_min) {
+	    min_min = min;
+	}
+                
+	if (min > min_max) {
+	    min_max = min;
+	}
+                
+	if (max < max_min) {
+	    max_min = max;
+	}
+                
+	if (max > max_max) {
+	    max_max = max;
+	}
     }
 }
 
@@ -1113,6 +1136,12 @@ float EvaluationSummary::computeStandardDeviation(const std::vector<int> gt, con
                 max = data.at<float>(i, j);
             }
         }
+	// Do not forget last data
+	std_min += min*min;
+	std_max += max*max;
+	mean_min += min;
+	mean_max += max;
+	++count_0;
         
         std_min /= count_0;
         std_max /= count_0;
